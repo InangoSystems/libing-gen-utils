@@ -92,10 +92,10 @@ endif
 all: $(SRC_LUACONFIG) $(SRC_GENUTILS) $(PROG_LUACONFIG) $(PROG_GENUTILS)
 
 $(PROG_LUACONFIG): $(OBJ_LUACONFIG)
-	$(CC) $(OBJ_LUACONFIG) $(LDFLAGS) $(LUACONFIG_LIBS) -o $@
+	$(CC) -Wl,-soname,$@ $(OBJ_LUACONFIG) $(LDFLAGS) $(LUACONFIG_LIBS) -o $@
 
 $(PROG_GENUTILS): $(OBJ_GENUTILS) $(HW_BINARIES)
-	$(CC) $(OBJ_GENUTILS) $(LDFLAGS) -o $@
+	$(CC) -Wl,-soname,$@ $(OBJ_GENUTILS) $(LDFLAGS) -o $@
 
 install:
 	install -d $(DESTDIR)$(PREFIX)/include
