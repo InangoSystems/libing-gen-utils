@@ -89,6 +89,8 @@ ifeq ($(PREFIX),)
     PREFIX := /usr
 endif
 
+override LUAPATH ?= $(PREFIX)/lib/lua
+
 all: $(SRC_LUACONFIG) $(SRC_GENUTILS) $(PROG_LUACONFIG) $(PROG_GENUTILS)
 
 $(PROG_LUACONFIG): $(OBJ_LUACONFIG)
@@ -104,8 +106,8 @@ install:
 	install -d $(DESTDIR)$(PREFIX)/lib
 	install -m 644 $(PROG_GENUTILS) $(DESTDIR)$(PREFIX)/lib/
 
-	install -d  $(DESTDIR)$(PREFIX)/lib/lua/mmx
-	install -m 644 $(PROG_LUACONFIG) $(DESTDIR)$(PREFIX)/lib/lua/mmx/
+	install -d  $(DESTDIR)$(LUAPATH)/mmx
+	install -m 644 $(PROG_LUACONFIG) $(DESTDIR)$(LUAPATH)/mmx/
 
 clean:
 	rm -f $(OBJ_LUACONFIG) $(PROG_LUACONFIG) $(OBJ_GENUTILS) $(PROG_GENUTILS)
