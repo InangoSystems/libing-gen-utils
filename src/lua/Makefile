@@ -68,11 +68,11 @@
 #
 ################################################################################
 
-ifeq ($(PREFIX),)
+ifeq ($(strip $(PREFIX)),)
     PREFIX := /usr
 endif
 
-override LUAPATH ?= $(PREFIX)/lib/lua
+LUAPATH ?= $(PREFIX)/lib/lua
 
 all:
 	echo "Nothing to compile"

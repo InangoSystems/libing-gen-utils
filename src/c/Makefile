@@ -85,11 +85,11 @@ SRC_GENUTILS:=$(filter-out $(SRC_LUACONFIG),$(SRC_ALL))
 OBJ_LUACONFIG:=$(SRC_LUACONFIG:.c=.o)
 OBJ_GENUTILS:=$(SRC_GENUTILS:.c=.o)
 
-ifeq ($(PREFIX),)
-    PREFIX := /usr
+ifeq ($(strip $(PREFIX)),)
+	PREFIX := /usr
 endif
 
-override LUAPATH ?= $(PREFIX)/lib/lua
+LUAPATH ?= $(PREFIX)/lib/lua
 
 all: $(SRC_LUACONFIG) $(SRC_GENUTILS) $(PROG_LUACONFIG) $(PROG_GENUTILS)
 
