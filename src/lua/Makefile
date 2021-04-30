@@ -72,12 +72,14 @@ ifeq ($(PREFIX),)
     PREFIX := /usr
 endif
 
+override LUAPATH ?= $(PREFIX)/lib/lua
+
 all:
 	echo "Nothing to compile"
 
 install:
-	install -d $(DESTDIR)$(PREFIX)/lib/lua/mmx
-	install -m 644 *.lua $(DESTDIR)$(PREFIX)/lib/lua/mmx/
+	install -d $(DESTDIR)$(LUAPATH)/mmx
+	install -m 644 *.lua $(DESTDIR)$(LUAPATH)/mmx/
 
 clean:
 	echo "Nothing to clean"

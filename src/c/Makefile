@@ -70,9 +70,7 @@
 
 .PHONY: all clean
 
-CURDIR := $(shell pwd)
-
-override CFLAGS += -c -std=c99 -fPIC -Wall -Wextra -Wpedantic -I$(CURDIR)
+override CFLAGS += -c -std=c99 -fPIC -Wall -Wextra -Wpedantic
 override LDFLAGS += -shared -fPIC -llua
 
 LUACONFIG_LIBS=-lconfig
@@ -81,7 +79,7 @@ PROG_LUACONFIG=lualibconfig.so
 PROG_GENUTILS=libing-gen-utils.so
 
 SRC_ALL:=$(wildcard *.c)
-SRC_LUACONFIG:=$(wildcard $(CURDIR)/lualibconfig.c)
+SRC_LUACONFIG:=$(wildcard lualibconfig.c)
 SRC_GENUTILS:=$(filter-out $(SRC_LUACONFIG),$(SRC_ALL))
 
 OBJ_LUACONFIG:=$(SRC_LUACONFIG:.c=.o)
@@ -91,13 +89,15 @@ ifeq ($(PREFIX),)
     PREFIX := /usr
 endif
 
+override LUAPATH ?= $(PREFIX)/lib/lua
+
 all: $(SRC_LUACONFIG) $(SRC_GENUTILS) $(PROG_LUACONFIG) $(PROG_GENUTILS)
 
 $(PROG_LUACONFIG): $(OBJ_LUACONFIG)
-	$(CC) $(OBJ_LUACONFIG) $(LDFLAGS) $(LUACONFIG_LIBS) -o $@
+	$(CC) -Wl,-soname,$@ $(OBJ_LUACONFIG) $(LDFLAGS) $(LUACONFIG_LIBS) -o $@
 
 $(PROG_GENUTILS): $(OBJ_GENUTILS) $(HW_BINARIES)
-	$(CC) $(OBJ_GENUTILS) $(LDFLAGS) -o $@
+	$(CC) -Wl,-soname,$@ $(OBJ_GENUTILS) $(LDFLAGS) -o $@
 
 install:
 	install -d $(DESTDIR)$(PREFIX)/include
@@ -106,8 +106,8 @@ install:
 	install -d $(DESTDIR)$(PREFIX)/lib
 	install -m 644 $(PROG_GENUTILS) $(DESTDIR)$(PREFIX)/lib/
 
-	install -d  $(DESTDIR)$(PREFIX)/lib/lua/mmx
-	install -m 644 $(PROG_LUACONFIG) $(DESTDIR)$(PREFIX)/lib/lua/mmx/
+	install -d  $(DESTDIR)$(LUAPATH)/mmx
+	install -m 644 $(PROG_LUACONFIG) $(DESTDIR)$(LUAPATH)/mmx/
 
 clean:
 	rm -f $(OBJ_LUACONFIG) $(PROG_LUACONFIG) $(OBJ_GENUTILS) $(PROG_GENUTILS)
