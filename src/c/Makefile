@@ -71,7 +71,7 @@
 .PHONY: all clean
 
 override CFLAGS += -c -std=c99 -fPIC -Wall -Wextra -Wpedantic
-override LDFLAGS += -shared -fPIC -llua
+override LDFLAGS += -shared -fPIC -llua5.1
 
 LUACONFIG_LIBS=-lconfig
 
